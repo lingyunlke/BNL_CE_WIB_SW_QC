@@ -15,7 +15,7 @@ def CreateFolders(fembs, fembNo, env, toytpc):
 
     #reportdir = "/nfs/hothstor1/towibs/tmp/FEMB_QC_reports/CHK/"+datadir+"/"
     #reportdir = "./reports/"+datadir+"/"
-    reportdir = "D:/IO_1865_1D_QC/CHK/Reports/"+datadir+"/"
+    reportdir = "./tmp_data/CHK/Reports/"+datadir+"/"
     PLOTDIR = {}
 
     for ifemb in fembs:
@@ -57,7 +57,8 @@ if len(sys.argv) > 2:
 
 datadir = sys.argv[1]
 #fdata = "/nfs/hothstor1/towibs/tmp/FEMB_QC_data/CHK/"+datadir+"/"
-fdata = "D:/IO_1865_1D_QC/CHK/"+datadir+"/"
+#fdata = "D:/IO_1865_1D_QC/CHK/"+datadir+"/"
+fdata = "./tmp_data/CHK/"+datadir+"/"
 print(fdata)
 
 ###### load logs and create report folder ######
@@ -244,13 +245,14 @@ for buf in ["SE", "DIFF"]:
             vfstd = np.std(vf)
             mvold[key] = [vfm, vfstd]
     
+        vgnd = mvold["GND"][0]
         for key in vkeys:
             if "GND" in key:
                 mvold[key].append(mvold[key][0]*LSB)
             elif "HALF" in key:
-                mvold[key].append((mvold[key][0]-mvold["GND"][0])*LSB*2)
+                mvold[key].append((mvold[key][0]-vgnd)*LSB*2)
             else:
-                mvold[key].append((mvold[key][0]--mvold["GND"][0])*LSB)
+                mvold[key].append((mvold[key][0]-vgnd)*LSB)
         mvvold = {}
         for key in mvold.keys():
             if "HALF" in key:
